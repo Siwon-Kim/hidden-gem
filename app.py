@@ -5,6 +5,7 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 
+import account.py
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,6 +15,20 @@ def home():
 
 
 # Create : crawling Needed Section
+# @app.route("/store", methods=["POST"])
+# def post_menu():
+#     next_id = len(stores) + 1
+#     request_data = request.get_json()
+#     store = {
+#         "id": next_id,
+#         "store_name": request_data["store_name"],
+#         "store_comment": request_data["store_comment"],
+#         "star": request_data["star"],
+#     }
+#     next_id += 1
+#     stores.append(store)
+#     return jsonify(store)
+
 @app.route("/store", methods=["POST"])
 def post_menu():
     url_receive = request.form['url_give']

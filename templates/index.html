@@ -12,7 +12,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
-    <title>Hidden Gem</title>
+    <title>Hidden Gem: 나만의 숨겨진 맛집 찾기</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
@@ -120,12 +120,22 @@
         function close_box() {
             $('#post-box').hide()
         }
+
+        // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
     </script>
 </head>
 
 <body>
     <div class="mytitle">
-        <h1>인생맛집</h1>
+        <h1>인생 맛집</h1>
+        <button href="login.html">로그인</button>
+        <button href="register.html">회원가입</button>
+        <button class="button is-danger" onclick="logout()">로그아웃</button>
         <button onclick="open_box()">맛집 기록하기</button>
     </div>
     <div class="mypost" id="post-box">
