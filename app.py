@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
+import account.py
+
 
 @app.route("/")
 def home():
@@ -9,19 +11,19 @@ def home():
 
 
 # Create : crawling Needed Section
-@app.route("/store", methods=["POST"])
-def post_menu():
-    next_id = len(stores) + 1
-    request_data = request.get_json()
-    store = {
-        "id": next_id,
-        "store_name": request_data["store_name"],
-        "store_comment": request_data["store_comment"],
-        "star": request_data["star"],
-    }
-    next_id += 1
-    stores.append(store)
-    return jsonify(store)
+# @app.route("/store", methods=["POST"])
+# def post_menu():
+#     next_id = len(stores) + 1
+#     request_data = request.get_json()
+#     store = {
+#         "id": next_id,
+#         "store_name": request_data["store_name"],
+#         "store_comment": request_data["store_comment"],
+#         "star": request_data["star"],
+#     }
+#     next_id += 1
+#     stores.append(store)
+#     return jsonify(store)
 
 
 # Read
