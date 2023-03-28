@@ -1,6 +1,5 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-
-account = Flask(__name__)
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for, Blueprint
+account = Blueprint("account", __name__, url_prefix='/')
 
 from pymongo import MongoClient
 import certifi
@@ -62,7 +61,7 @@ def register():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@account.route("/api/register", methods=["POST"])
+@account.route("/api/register", methods=["POST","GET"] )
 def api_register():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -135,5 +134,3 @@ def api_valid():
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
 
-if __name__ == '__main__':
-     account.run('0.0.0.0', port=5000, debug=True)
