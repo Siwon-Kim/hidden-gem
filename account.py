@@ -11,7 +11,7 @@ client = MongoClient(
     "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority",
     tlsCAFile=ca,
 )
-db = client.dbsparta_plus_week4
+db = client.dbhiddengem
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
@@ -135,5 +135,5 @@ def api_valid():
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
 
-# if __name__ == '__main__':
-#     app.run('0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+     app.run('0.0.0.0', port=5000, debug=True)
