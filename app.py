@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
-import requests
+import requests, sys
 from bs4 import BeautifulSoup
 
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsiwon
 
-# import account.py
+from bson.objectid import ObjectId
 
 
 @app.route("/")
@@ -29,6 +29,7 @@ def store_post():
     category = soup.select_one('body > main > article > div.column-wrapper > div.column-contents > div > section.restaurant-detail > table > tbody > tr:nth-child(3) > td > span').text
     address = soup.select_one('body > main > article > div.column-wrapper > div.column-contents > div > section.restaurant-detail > table > tbody > tr:nth-child(1) > td').text.split('지번')
     img_url = soup.find("img")["src"]
+    like = 0
 
     store = {
         "store_name": store_name,
@@ -37,6 +38,7 @@ def store_post():
         "image" : img_url,
         "store_comment": comment_receive,
         "star": star_receive,
+        "like": like
     }
 
     db.stores.insert_one(store)
@@ -46,9 +48,11 @@ def store_post():
 # Read
 @app.route("/store", methods=["GET"])
 def store_get():
-    stores_info = list(db.stores.find({}, {'_id': False}))
-    return jsonify({"stores": stores_info})
+    stores = list(db.stores.find())
+    for store in stores:
+        store['_id'] = str(store['_id'])
 
+    return jsonify({"stores": stores})
 
 # # Update
 
@@ -60,6 +64,20 @@ def store_get():
 #             stores.pop(i)
 #             return jsonify(stores)
 #     return jsonify("삭제 불가능한 식당입니다")
+
+# Like button
+@app.route("/like", methods=["POST"])
+def like_update():
+    id_receive = request.form['id_give']
+    print(id_receive)
+    print(repr(ObjectId(id_receive)))
+    like = db.stores.find_one({"_id": ObjectId(id_receive)}, {"like": 1})
+    num_like = int(like["like"]) + 1
+    print(num_like)
+    before_like = { 'like': like["like"]}
+    add_like = { '$set': {'like': num_like }}
+    db.stores.update_one(before_like, add_like)
+    return jsonify({'msg': 'like is increased by 1'})
 
 
 if __name__ == "__main__":
