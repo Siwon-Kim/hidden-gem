@@ -51,15 +51,14 @@ function listing() {
                                 </div>`;
 
 				$("#cards").append(temp_html);
-				// &#128077
 			});
 			$(".like").click(function () {
-				// Frontend: Increase Like count
+				// Frontend: Increasing Like count on the page
 				$(this).html(function (i, val) {
-					return `&#128077 ${val.split(' ')[1] * 1 + 1}`;
+					return `&#128077 ${val.split(" ")[1] * 1 + 1}`;
 				});
 
-                // Backend: Bring increased Like count to the DB
+				// Backend: Sending Like count on th page to the DB
 				let formData = new FormData();
 				formData.append("id_give", this.value);
 				fetch("/like", { method: "POST", body: formData })
@@ -67,16 +66,16 @@ function listing() {
 					.then((data) => {});
 			});
 
-            $(".delete").click(function () {
-                let formData = new FormData();
+			$(".delete").click(function () {
+				let formData = new FormData();
 				formData.append("id_give", this.value);
 				console.log(this.value);
 				fetch("/store", { method: "DELETE", body: formData })
 					.then((response) => response.json())
 					.then((data) => {
-                        window.location.reload();
-                    });
-            })
+						window.location.reload();
+					});
+			});
 		});
 }
 
@@ -96,8 +95,6 @@ function posting() {
 			window.location.reload();
 		});
 }
-
-function delete_like() {}
 
 function open_box() {
 	$("#post-box").show();
