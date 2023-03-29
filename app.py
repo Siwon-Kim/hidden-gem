@@ -7,9 +7,10 @@ from account import account
 app = Flask(__name__)
 app.register_blueprint(account)
 
-import requests
-from bs4 import BeautifulSoup
+import requests, certifi
 
+from bs4 import BeautifulSoup
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient('mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority')
@@ -57,6 +58,7 @@ def store_post():
         "body > main > article > div.column-wrapper > div.column-contents > div > section.restaurant-detail > table > tbody > tr:nth-child(1) > td"
     ).text.split("지번")
     img_url = soup.find("img")["src"]
+    like = 0
 
     store = {
         "store_name": store_name,
@@ -65,6 +67,7 @@ def store_post():
         "image": img_url,
         "store_comment": comment_receive,
         "star": star_receive,
+        "like": like
     }
 
     db.stores.insert_one(store)
@@ -76,33 +79,30 @@ def store_post():
 def store_get():
     stores = list(db.stores.find())
     for store in stores:
-        store["_id"] = str(store["_id"])
-    # stores_info = list(db.stores.find({}, {"_id": False}))
-    return jsonify({"stores": stores})
+        store['_id'] = str(store['_id'])
 
+    return jsonify({"stores": stores})
 
 # # Update
 
-# # Delete
+# Delete
 @app.route("/store", methods=["DELETE"])
-def delete_store():
-    # id = request.args.to_dict
+def store_delete():
+    id_receive = request.form['id_give']
+    db.stores.delete_one({"_id": ObjectId(id_receive)})
+    return jsonify({'msg': 'Store is successfully deleted!'})
 
-    # name = request.form.get("store_name")
-    # print(name)
-    id_get = request.form["id_give"]
-    db.stores.delete_one({"_id": ObjectId(id_get)})
-    return jsonify({"msg": "Store Deleted!"})
+# Like button
+@app.route("/like", methods=["POST"])
+def like_update():
+    id_receive = request.form['id_give']
 
-    # mydb = db["stores"]
-    # print(mydb)
-    # for i in mydb.keys("store_name"):
-    #     if i == name:
-    #         mydb.delete_one(myquery)
-    # target = db.stores.keys(myquery)
-    # print(target)
-    # return redirect(url_for("home"))
-
+    like = db.stores.find_one({"_id": ObjectId(id_receive)}, {"like": 1})
+    num_like = int(like["like"]) + 1
+    add_like = { '$set': {'like': num_like }}
+    
+    db.stores.update_one({"_id": ObjectId(id_receive)}, add_like)
+    return jsonify({'msg': 'like is increased by 1'})
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)
