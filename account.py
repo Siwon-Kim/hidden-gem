@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for, Blueprint
-account = Blueprint('__main__', __name__, url_prefix='/')
+
+account = Blueprint('main', __name__, url_prefix='/')
 
 from pymongo import MongoClient
 import certifi
