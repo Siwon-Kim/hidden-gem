@@ -54,12 +54,13 @@ function listing() {
 				// &#128077
 			});
 			$(".like").click(function () {
-				// Increase Like count async
+				// Frontend: Increase Like count
 				$(this).html(function (i, val) {
                     console.log(`&#128077 ${val.split(' ')[1] * 1 + 1}`);
 					return `&#128077 ${val.split(' ')[1] * 1 + 1}`;
 				});
 
+                // Backend: Bring increased Like count to the DB
 				let formData = new FormData();
 				formData.append("id_give", this.value);
 				console.log(this.value);
