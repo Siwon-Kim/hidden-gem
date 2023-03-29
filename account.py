@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for, Blueprint
+
 account = Blueprint('main', __name__, url_prefix='/')
 
 from pymongo import MongoClient
@@ -8,7 +9,7 @@ ca = certifi.where()
 
 client = MongoClient(
     "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority",
-    tlsCAFile=ca,
+    tlsCAFile=ca
 )
 db = client.dbhiddengem
 
@@ -30,7 +31,7 @@ import hashlib
 #################################
 ##  HTML을 주는 부분             ##
 #################################
-@account.route("/")
+@account.route("/a")
 def home():
     token_receive = request.cookies.get("mytoken")
     try:
@@ -38,9 +39,9 @@ def home():
         user_info = db.user.find_one({"id": payload["id"]})
         return render_template("index.html", nickname=user_info["nick"])
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for(".login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+        return redirect(url_for(".login", msg="로그인 정보가 존재하지 않습니다."))
 
 
 @account.route("/login")
@@ -95,7 +96,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             "id": id_receive,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=5),
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=600),
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
