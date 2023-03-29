@@ -15,6 +15,14 @@ db = client.dbhiddengem
 @app.route("/")
 def home():
     return render_template("index.html")
+#페이지 불러오기
+@app.route('/login')
+def go_login():
+    return render_template("login.html")
+
+@app.route('/register')
+def go_register():
+    return render_template("register.html")
 
 @app.route("/store", methods=["POST"])
 def store_post():
