@@ -46,24 +46,23 @@ function listing() {
                                             삭제
                                         </button>
                                         <button type="button" class="btn btn-secondary">저장</button>
-						                <button type="button" class="btn like" value=${id}>
-                                            &#128077
-                                            <span class="like-num">${like}</span>
-                                        </button>
+						                <button type="button" class="btn like" value=${id}>&#128077 ${like}</button>
                                     </div>
                                 </div>`;
 
 				$("#cards").append(temp_html);
+				// &#128077
 			});
 			$(".like").click(function () {
 				// Increase Like count async
-				$(".like-num").html(function (i, val) {
-					return val * 1 + 1;
+				$(this).html(function (i, val) {
+                    console.log(`&#128077 ${val.split(' ')[1] * 1 + 1}`);
+					return `&#128077 ${val.split(' ')[1] * 1 + 1}`;
 				});
-				// Increase Like count and store in the DB
+
 				let formData = new FormData();
 				formData.append("id_give", this.value);
-                console.log(this.value);
+				console.log(this.value);
 				fetch("/like", { method: "POST", body: formData })
 					.then((response) => response.json())
 					.then((data) => {});
