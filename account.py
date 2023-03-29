@@ -8,7 +8,7 @@ ca = certifi.where()
 
 client = MongoClient(
     "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority",
-    tlsCAFile=ca,
+    tlsCAFile=ca
 )
 db = client.dbhiddengem
 
