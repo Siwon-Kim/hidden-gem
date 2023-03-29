@@ -14,7 +14,6 @@ db = client.dbhiddengem
 
 @app.route("/")
 def home():
-    print (1234)
     return render_template("index.html")
 
 @app.route("/store", methods=["POST"])
