@@ -1,6 +1,5 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-
-app = Flask(__name__)
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for, Blueprint
+account = Blueprint('main', __name__, url_prefix='/')
 
 from pymongo import MongoClient
 import certifi
@@ -11,7 +10,7 @@ client = MongoClient(
     "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority",
     tlsCAFile=ca,
 )
-db = client.dbsparta_plus_week4
+db = client.dbhiddengem
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
@@ -31,7 +30,7 @@ import hashlib
 #################################
 ##  HTML을 주는 부분             ##
 #################################
-@app.route("/")
+@account.route("/")
 def home():
     token_receive = request.cookies.get("mytoken")
     try:
@@ -44,13 +43,13 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@app.route("/login")
+@account.route("/login")
 def login():
     msg = request.args.get("msg")
     return render_template("login.html", msg=msg)
 
 
-@app.route("/register")
+@account.route("/register")
 def register():
     return render_template("register.html")
 
@@ -62,7 +61,7 @@ def register():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@app.route("/api/register", methods=["POST"])
+@account.route("/api/register", methods=["POST"] )
 def api_register():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -77,7 +76,7 @@ def api_register():
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
-@app.route("/api/login", methods=["POST"])
+@account.route("/api/login", methods=["POST"])
 def api_login():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -111,7 +110,7 @@ def api_login():
 # 로그인된 유저만 call 할 수 있는 API입니다.
 # 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
 # (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route("/api/nick", methods=["GET"])
+@account.route("/api/nick", methods=["GET"])
 def api_valid():
     token_receive = request.cookies.get("mytoken")
 
@@ -135,5 +134,3 @@ def api_valid():
         return jsonify({"result": "fail", "msg": "로그인 정보가 존재하지 않습니다."})
 
 
-# if __name__ == '__main__':
-#     app.run('0.0.0.0', port=5000, debug=True)

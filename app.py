@@ -1,19 +1,20 @@
+
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from bson.objectid import ObjectId
+from account import account
+
 
 app = Flask(__name__)
+app.register_blueprint(account)
 
 import requests
 from bs4 import BeautifulSoup
 
 from pymongo import MongoClient
 
-client = MongoClient(
-    "mongodb+srv://hidden:gem@cluster0.bdeer72.mongodb.net/?retryWrites=true&w=majority"
-)
-db = client.dbtom
+client = MongoClient('mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority')
+db = client.dbhiddengem
 
-# import account.py
 
 
 @app.route("/")
@@ -25,6 +26,14 @@ def home():
     stores = db.store
     return render_template("index.html", stores=stores)
 
+#페이지 불러오기
+@app.route('/login')
+def go_login():
+    return render_template("login.html")
+
+@app.route('/register')
+def go_register():
+    return render_template("register.html")
 
 @app.route("/store", methods=["POST"])
 def store_post():
