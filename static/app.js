@@ -39,9 +39,9 @@ function listing() {
                                             </p>
                                         </div>
                                         <button
-                                            onclick="deleting()"
                                             type="button"
-                                            class="btn btn-dark"
+                                            class="btn btn-dark delete"
+                                            value=${id}
                                         >
                                             삭제
                                         </button>
@@ -56,18 +56,27 @@ function listing() {
 			$(".like").click(function () {
 				// Frontend: Increase Like count
 				$(this).html(function (i, val) {
-                    console.log(`&#128077 ${val.split(' ')[1] * 1 + 1}`);
 					return `&#128077 ${val.split(' ')[1] * 1 + 1}`;
 				});
 
                 // Backend: Bring increased Like count to the DB
 				let formData = new FormData();
 				formData.append("id_give", this.value);
-				console.log(this.value);
 				fetch("/like", { method: "POST", body: formData })
 					.then((response) => response.json())
 					.then((data) => {});
 			});
+
+            $(".delete").click(function () {
+                let formData = new FormData();
+				formData.append("id_give", this.value);
+				console.log(this.value);
+				fetch("/store", { method: "DELETE", body: formData })
+					.then((response) => response.json())
+					.then((data) => {
+                        window.location.reload();
+                    });
+            })
 		});
 }
 

@@ -60,14 +60,13 @@ def store_get():
 
 # # Update
 
-# # Delete
-# @app.route("/store/<int:id>", methods=["DELETE"])
-# def delete_store(id):
-#     for i, store in enumerate(stores):
-#         if store["id"] == id:
-#             stores.pop(i)
-#             return jsonify(stores)
-#     return jsonify("삭제 불가능한 식당입니다")
+# Delete
+@app.route("/store", methods=["DELETE"])
+def store_delete():
+    id_receive = request.form['id_give']
+    print(id_receive)
+    db.stores.delete_one({"_id": ObjectId(id_receive)})
+    return jsonify({'msg': 'Store is successfully deleted!'})
 
 # Like button
 @app.route("/like", methods=["POST"])
@@ -75,7 +74,6 @@ def like_update():
     id_receive = request.form['id_give']
 
     like = db.stores.find_one({"_id": ObjectId(id_receive)}, {"like": 1})
-    print(like)
     num_like = int(like["like"]) + 1
     add_like = { '$set': {'like': num_like }}
     
