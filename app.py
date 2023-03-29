@@ -73,13 +73,13 @@ def store_get():
 @app.route("/like", methods=["POST"])
 def like_update():
     id_receive = request.form['id_give']
-    print(id_receive)
-    print(repr(ObjectId(id_receive)))
+
     like = db.stores.find_one({"_id": ObjectId(id_receive)}, {"like": 1})
     num_like = int(like["like"]) + 1
-    print(num_like)
+    
     before_like = { 'like': like["like"]}
     add_like = { '$set': {'like': num_like }}
+    
     db.stores.update_one(before_like, add_like)
     return jsonify({'msg': 'like is increased by 1'})
 
