@@ -1,14 +1,15 @@
 from flask import Flask, render_template, request, jsonify
+from account import account
+
 app = Flask(__name__)
+app.register_blueprint(account)
 
 import requests
 from bs4 import BeautifulSoup
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority')
-db = client.dbsiwon
-
-# import account.py
+client = MongoClient('mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority')
+db = client.dbhiddengem
 
 
 @app.route("/")
