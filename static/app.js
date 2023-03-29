@@ -38,16 +38,18 @@ function listing() {
                                                 ${comment}
                                             </p>
                                         </div>
-                                        <button
-                                            type="button"
-                                            class="btn btn-dark delete"
-                                            value=${id}
-                                        >
-                                            삭제
-                                        </button>
-                                        <button type="button" class="btn btn-secondary">저장</button>
-						                <button type="button" class="btn like" value=${id}>&#128077 ${like}</button>
-                                    </div>
+										<div class="store-btn">
+											<button
+												type="button"
+												class="btn btn-dark delete"
+												value=${id}
+											>
+												삭제
+											</button>
+											<button type="button" class="btn btn-warning">저장</button>
+											<button type="button" class="btn btn-secondary like" value=${id}>&#128077 ${like}</button>
+										</div>
+									</div>
                                 </div>`;
 
 				$("#cards").append(temp_html);

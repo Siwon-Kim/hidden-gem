@@ -27,7 +27,6 @@ def home():
     stores = db.store
     return render_template("index.html", stores=stores)
 
-#페이지 불러오기
 @app.route('/login')
 def go_login():
     return render_template("login.html")
@@ -73,13 +72,6 @@ def store_post():
     db.stores.insert_one(store)
     return jsonify({"msg": "Store is Successfully Saved!"})
 
-@app.route('/login')
-def go_login():
-    return render_template("login.html")
-
-@app.route('/register')
-def go_register():
-    return render_template("register.html")
 
 # Read
 @app.route("/store", methods=["GET"])
@@ -110,6 +102,7 @@ def like_update():
     
     db.stores.update_one({"_id": ObjectId(id_receive)}, add_like)
     return jsonify({'msg': 'like is increased by 1'})
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)
