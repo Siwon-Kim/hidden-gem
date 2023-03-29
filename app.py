@@ -43,6 +43,13 @@ def store_post():
     db.stores.insert_one(store)
     return jsonify({"msg": "Store is Successfully Saved!"})
 
+@app.route('/login')
+def go_login():
+    return render_template("login.html")
+
+@app.route('/register')
+def go_register():
+    return render_template("register.html")
 
 # Read
 @app.route("/store", methods=["GET"])

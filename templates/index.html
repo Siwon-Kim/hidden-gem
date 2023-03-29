@@ -13,12 +13,14 @@
 			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 			crossorigin="anonymous"
 		/>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 			crossorigin="anonymous"
 		></script>
+		
 
 		<title>Hidden Gem 나만의 숨겨진 맛집 찾기</title>
 
@@ -183,7 +185,7 @@
 
 			// 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
 			function logout() {
-				$.removeCookie("mytoken");
+				$.removeCookie('mytoken');
 				alert("로그아웃!");
 				window.location.href = "/login";
 			}
@@ -194,8 +196,8 @@
 		<div class="mytitle">
 			<h1>인생 맛집</h1>
 			<div>
-				<button type="login" onclick="location.href='login.html';"> 로그인 </button>
-				<button type="register" onclick="location.href='register.html';"> 회원가입 </button>
+				<button class="login" onclick="location.href='login'"> 로그인 </button>
+				<button class="register" onclick="location.href='register'"> 회원가입 </button>
 				<button class="button is-danger" onclick="logout()">
 					로그아웃
 				</button>
