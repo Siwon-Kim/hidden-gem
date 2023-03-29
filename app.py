@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -64,23 +65,25 @@ def store_post():
 # Read
 @app.route("/store", methods=["GET"])
 def store_get():
-    stores_info = list(db.stores.find({}, {"_id": False}))
-    return jsonify({"stores": stores_info})
+    stores = list(db.stores.find())
+    for store in stores:
+        store["_id"] = str(store["_id"])
+    # stores_info = list(db.stores.find({}, {"_id": False}))
+    return jsonify({"stores": stores})
 
 
 # # Update
 
 # # Delete
-@app.route("/delete", methods=["POST"])
+@app.route("/store", methods=["DELETE"])
 def delete_store():
     # id = request.args.to_dict
-    client = MongoClient(
-        "mongodb+srv://hidden:gem@cluster0.bdeer72.mongodb.net/?retryWrites=true&w=majority"
-    )
-    db = client.dbtom
 
-    name = request.form.get("store_name")
-    print(name)
+    # name = request.form.get("store_name")
+    # print(name)
+    id_get = request.form["id_give"]
+    db.stores.delete_one({"_id": ObjectId(id_get)})
+    return jsonify({"msg": "Store Deleted!"})
 
     # mydb = db["stores"]
     # print(mydb)
@@ -89,7 +92,7 @@ def delete_store():
     #         mydb.delete_one(myquery)
     # target = db.stores.keys(myquery)
     # print(target)
-    return redirect(url_for("home"))
+    # return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

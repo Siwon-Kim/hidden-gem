@@ -110,6 +110,7 @@
 						let comment = e["store_comment"];
 						let idex = stores.map(function (o) { return o.store_name; }).indexOf(name);
 						var idx = parseInt(idex);
+						let id = e["_id"];
 
 						let star_repeat = "⭐".repeat(star);
 						let temp_html = `<div class="col">
@@ -131,13 +132,21 @@
 														${comment}
 													</p>
 												</div>
-												<form action="{{url_for('delete_store')}}" method="post" name="store_name" id="form_delete">
-													<input type="text" name="store_name" value="${name}" form="form_delete">
-													<button type="submit" class="toggle-button btn btn-dark" name="store_name" value="${name}" form="form_delete">삭제
-												</form>
-											</div>
+													<button type="submit" class="toggle-button btn btn-dark delete-btn" name="_id" value="${id}" form="form_delete">삭제
+												</div>
 										</div>`;
 						$("#cards").append(temp_html);
+					});
+					$(".delete-btn").click(function () {
+						let formData = new FormData();
+						formData.append("id_give", this.value); // value=${id}에서 id를 가져옴
+						console.log(this.value);
+						fetch("/store", { method: "DELETE", body: formData })
+							.then((response) => response.json())
+							.then((data) => {
+								window.location.reload();
+							});
+
 					});
 				});
 		}
