@@ -15,17 +15,18 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient(
-    "mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://sparta:test@cluster0.5pjmefm.mongodb.net/?retryWrites=true&w=majority"
 )
-db = client.dbHiddenGem
-
+db = client.dbhiddengem
 
 @app.route("/")
 def home():
+    global nick
     token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         user_info = db.user.find_one({"id": payload["id"]})
+        nick = user_info["nick"]
         return render_template("index.html", nickname=user_info["nick"])
     except:
         return render_template("index.html")
@@ -46,13 +47,16 @@ def go_login():
 def go_register():
     return render_template("register.html")
 
+@app.route("/modify")
+def go_modify():
+    return render_template("modify.html")
 
 @app.route("/store", methods=["POST"])
 def store_post():
-    # 입력으로 받아온 URL을 통해 크롤링합니다
     url_receive = request.form["url_give"]
     comment_receive = request.form["comment_give"]
     star_receive = request.form["star_give"]
+
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
@@ -117,10 +121,6 @@ def store_get():
         return jsonify({"stores": stores, "userid": userid, "liked_store": liked_store})
 
 
-# Update
-@app.route("/update", methods=["POST"])
-def store_update():
-    pass
 
 # Delete
 @app.route("/store", methods=["DELETE"])
@@ -129,6 +129,17 @@ def store_delete():
     db.stores.delete_one({"_id": ObjectId(id_receive)})
     return jsonify({"msg": "Store is successfully deleted!"})
 
+# Update
+@app.route("/update", methods=["UPDATE"])
+def store_update():
+    comment_receive = request.form["comment_give"]
+    star_receive = request.form["star_give"]
+    id_receive = request.form["id_give"]
+    update_comment = {"$set": {"store_comment" : comment_receive}}
+    db.stores.update_one({"_id": ObjectId(id_receive)}, update_comment)
+    update_star = {"$set": {"star" : star_receive}}
+    db.stores.update_one({"_id": ObjectId(id_receive)}, update_star)
+    return jsonify({"msg": "Store is successfully update!"})
 
 # Like button
 @app.route("/likeUp", methods=["POST"])

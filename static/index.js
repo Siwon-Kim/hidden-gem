@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	listing();
 });
-
+let id
 function listing() {
 	let liked_store, userid;
 	fetch("/store")
@@ -23,7 +23,7 @@ function listing() {
 				let star = e["star"];
 				let comment = e["store_comment"];
 				let like = e["like"];
-				let id = e["_id"];
+				id = e["_id"];
 				let writerId = e["userid"]
 
 				let star_repeat = "⭐".repeat(star);
@@ -72,7 +72,8 @@ function listing() {
 				// 유저가 이미 like를 눌렀을 때
 				else if (liked_store.includes(id)) {
 					temp_html_2 = `<div class="store-btn">
-										<button type="button" class="like button is-warning" value=${id}>&#128077 ${like}</button>
+											<button type="button" class="button is-danger modify" value=${id}>수정</button>
+											<button type="button" class="like button is-warning" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
 							</div>`;
@@ -80,6 +81,7 @@ function listing() {
 				// 유저가 like를 누르지 않았을 때
 				else {
 					temp_html_2 = `<div class="store-btn">
+										<button type="button" class="button is-danger modify" value=${id}>수정</button>
 										<button type="button" class="like button is-warning is-light" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
@@ -145,6 +147,12 @@ function listing() {
 				}
 			});
 
+			$(".modify").click(function () {
+				id = this.value;
+				$("#update-box").toggle();
+
+			});
+
 			// $(".delete").ready(function(){
             //     if (user != writer) {
             //         $(".delete").hide();
@@ -184,4 +192,28 @@ function logout() {
 	$.removeCookie("mytoken");
 	alert("로그아웃!");
 	window.location.href = "/login";
+}
+
+function update() {
+	console.log(id)
+	let comment_update = $("#commentupdate").val();
+	console.log(comment_update)
+	let star_update = $("#starupdate").val();
+	console.log(star_update)
+
+	let formData = new FormData();
+	formData.append("comment_give", comment_update);
+	formData.append("star_give", star_update);
+	formData.append("id_give", id);
+
+	fetch("/update", { method: "UPDATE", body: formData })
+		.then((res) => res.json())
+		.then((data) => {
+			window.location.reload();
+		});
+	$("#update-box").toggle();
+}
+
+function close_update() {
+	$("#update-box").toggle();
 }
