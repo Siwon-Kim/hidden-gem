@@ -3,6 +3,9 @@
 
 <img src="https://github.com/kangdh208/hiddengem/blob/master/26%EC%A1%B0-HiddenGem-compressed.gif" width="1000" height="500"/>
 
+## 0. Deployment
+Using AWS EC2
+[http://100.25.193.224:5000/](Hidden Gem Website)
 
 ## 1. 제작기간 & 팀원소개
  - 2023년 3월 26일 ~ 2023년 3월 30일
