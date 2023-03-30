@@ -1,6 +1,9 @@
 # :fork_and_knife: Hidden Gem (숨겨진 나의 맛집 공유 웹사이트)
 > Hidden Gem은 자신만이 알고 있는 숨겨진 맛집을 뜻합니다.
 
+![hiddengem thumbnail](https://user-images.githubusercontent.com/76824986/228803745-65f2129d-5151-4037-b8e2-efaac78e61bf.png)
+
+
 ## 1. 제작기간 & 팀원소개
  - 2023년 3월 26일 ~ 2023년 3월 30일
  - 26조 온보딩 미니프로젝트
