@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	listing();
 });
-let id
+let id;
 function listing() {
 	let liked_store, userid;
 	fetch("/store")
@@ -24,7 +24,7 @@ function listing() {
 				let comment = e["store_comment"];
 				let like = e["like"];
 				id = e["_id"];
-				let writerId = e["userid"]
+				let writerId = e["userid"];
 
 				let star_repeat = "⭐".repeat(star);
 				let temp_html, temp_html_1, temp_html_2;
@@ -56,6 +56,9 @@ function listing() {
 										<p>${star_repeat}</p>
 										<p class="mycomment">
 											${comment}
+										</p>
+										<p class="mycomment">
+											작성자: ${writerId}
 										</p>
 									</div>
 								`;
@@ -150,16 +153,15 @@ function listing() {
 			$(".modify").click(function () {
 				id = this.value;
 				$("#update-box").toggle();
-
 			});
 
 			// $(".delete").ready(function(){
-            //     if (user != writer) {
-            //         $(".delete").hide();
-            //     } else {
-            //         $(".delete").show();
-            //     };
-            // });
+			//     if (user != writer) {
+			//         $(".delete").hide();
+			//     } else {
+			//         $(".delete").show();
+			//     };
+			// });
 		});
 }
 
@@ -195,11 +197,11 @@ function logout() {
 }
 
 function update() {
-	console.log(id)
+	console.log(id);
 	let comment_update = $("#commentupdate").val();
-	console.log(comment_update)
+	console.log(comment_update);
 	let star_update = $("#starupdate").val();
-	console.log(star_update)
+	console.log(star_update);
 
 	let formData = new FormData();
 	formData.append("comment_give", comment_update);
