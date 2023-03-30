@@ -42,7 +42,6 @@ def home():
 def go_login():
     return render_template("login.html")
 
-
 @app.route("/register")
 def go_register():
     return render_template("register.html")
@@ -56,7 +55,6 @@ def store_post():
     url_receive = request.form["url_give"]
     comment_receive = request.form["comment_give"]
     star_receive = request.form["star_give"]
-
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
@@ -135,8 +133,10 @@ def store_update():
     comment_receive = request.form["comment_give"]
     star_receive = request.form["star_give"]
     id_receive = request.form["id_give"]
+
     update_comment = {"$set": {"store_comment" : comment_receive}}
     db.stores.update_one({"_id": ObjectId(id_receive)}, update_comment)
+
     update_star = {"$set": {"star" : star_receive}}
     db.stores.update_one({"_id": ObjectId(id_receive)}, update_star)
     return jsonify({"msg": "Store is successfully update!"})

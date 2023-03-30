@@ -75,7 +75,7 @@ function listing() {
 				// 유저가 이미 like를 눌렀을 때
 				else if (liked_store.includes(id)) {
 					temp_html_2 = `<div class="store-btn">
-											<button type="button" class="button is-danger modify" value=${id}>수정</button>
+											<button type="button" class="button is-danger modify" name=${writerId} value=${id}>수정</button>
 											<button type="button" class="like button is-warning" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
@@ -84,7 +84,7 @@ function listing() {
 				// 유저가 like를 누르지 않았을 때
 				else {
 					temp_html_2 = `<div class="store-btn">
-										<button type="button" class="button is-danger modify" value=${id}>수정</button>
+										<button type="button" class="button is-danger modify" name=${writerId} value=${id}>수정</button>
 										<button type="button" class="like button is-warning is-light" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
@@ -151,17 +151,14 @@ function listing() {
 			});
 
 			$(".modify").click(function () {
-				id = this.value;
-				$("#update-box").toggle();
+				if (this.name == userid) {
+					id = this.value;
+					$("#update-box").toggle();
+				} else {
+					$("#update-box").hide();
+					alert("수정 권한이 없습니다");
+				}
 			});
-
-			// $(".delete").ready(function(){
-			//     if (user != writer) {
-			//         $(".delete").hide();
-			//     } else {
-			//         $(".delete").show();
-			//     };
-			// });
 		});
 }
 
@@ -180,20 +177,6 @@ function posting() {
 		.then((data) => {
 			window.location.reload();
 		});
-}
-
-function open_box() {
-	$("#post-box").show();
-}
-function close_box() {
-	$("#post-box").hide();
-}
-
-// 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-function logout() {
-	$.removeCookie("mytoken");
-	alert("로그아웃!");
-	window.location.href = "/login";
 }
 
 function update() {
@@ -218,4 +201,18 @@ function update() {
 
 function close_update() {
 	$("#update-box").toggle();
+}
+
+function open_box() {
+	$("#post-box").show();
+}
+function close_box() {
+	$("#post-box").hide();
+}
+
+// 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+function logout() {
+	$.removeCookie("mytoken");
+	alert("로그아웃!");
+	window.location.href = "/login";
 }
