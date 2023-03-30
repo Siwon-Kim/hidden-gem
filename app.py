@@ -49,6 +49,7 @@ def go_register():
 
 @app.route("/store", methods=["POST"])
 def store_post():
+    # 입력으로 받아온 URL을 통해 크롤링합니다
     url_receive = request.form["url_give"]
     comment_receive = request.form["comment_give"]
     star_receive = request.form["star_give"]
@@ -71,6 +72,14 @@ def store_post():
     img_url = soup.find("img")["src"]
     like = 0
 
+    # 로그인된 유저 정보도 DB에 추가합니다
+    try:
+        token_receive = request.cookies.get('mytoken')
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload["id"]
+    except:
+        userid = None
+        
     store = {
         "store_name": store_name,
         "address": address[0],
@@ -79,6 +88,7 @@ def store_post():
         "store_comment": comment_receive,
         "star": star_receive,
         "like": like,
+        "userid": userid
     }
 
     db.stores.insert_one(store)
@@ -107,7 +117,10 @@ def store_get():
         return jsonify({"stores": stores, "userid": userid, "liked_store": liked_store})
 
 
-# # Update
+# Update
+@app.route("/update", methods=["POST"])
+def store_update():
+    pass
 
 # Delete
 @app.route("/store", methods=["DELETE"])

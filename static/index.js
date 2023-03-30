@@ -11,8 +11,6 @@ function listing() {
 			try {
 				liked_store = data["liked_store"];
 				userid = data["userid"];
-				console.log(userid);
-				console.log(liked_store);
 			} catch {
 				liked_store = [];
 			}
@@ -26,6 +24,7 @@ function listing() {
 				let comment = e["store_comment"];
 				let like = e["like"];
 				let id = e["_id"];
+				let writerId = e["userid"]
 
 				let star_repeat = "⭐".repeat(star);
 				let temp_html, temp_html_1, temp_html_2;
@@ -40,6 +39,7 @@ function listing() {
 											type="button"
 											class="btn btn-dark delete"
 											value=${id}
+											name=${writerId}
 											style="margin: 15px 15px 0 15px;"
 										>
 											삭제
@@ -72,7 +72,6 @@ function listing() {
 				// 유저가 이미 like를 눌렀을 때
 				else if (liked_store.includes(id)) {
 					temp_html_2 = `<div class="store-btn">
-										<button type="button" class="button is-info">저장</button>
 										<button type="button" class="like button is-warning" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
@@ -81,7 +80,6 @@ function listing() {
 				// 유저가 like를 누르지 않았을 때
 				else {
 					temp_html_2 = `<div class="store-btn">
-										<button type="button" class="button is-info">저장</button>
 										<button type="button" class="like button is-warning is-light" value=${id}>&#128077 ${like}</button>
 								   </div>
 								</div>
@@ -132,15 +130,28 @@ function listing() {
 			});
 
 			$(".delete").click(function () {
-				let formData = new FormData();
-				formData.append("id_give", this.value);
-				console.log(this.value);
-				fetch("/store", { method: "DELETE", body: formData })
-					.then((response) => response.json())
-					.then((data) => {
-						window.location.reload();
-					});
+				console.log(this.name, userid);
+				if (this.name == userid) {
+					let formData = new FormData();
+					formData.append("id_give", this.value);
+					console.log(this.value);
+					fetch("/store", { method: "DELETE", body: formData })
+						.then((response) => response.json())
+						.then((data) => {
+							window.location.reload();
+						});
+				} else {
+					alert("삭제 권한이 없습니다");
+				}
 			});
+
+			// $(".delete").ready(function(){
+            //     if (user != writer) {
+            //         $(".delete").hide();
+            //     } else {
+            //         $(".delete").show();
+            //     };
+            // });
 		});
 }
 
