@@ -1,4 +1,4 @@
-# :fork_and_knife: Hidden Gem Share your favorite restaurants!
+# :fork_and_knife: Hidden Gem: Share your favorite restaurants!
 > "Hidden Gem" refers to hidden, lesser-known restaurants or eateries that one is familiar with. 
 > Users can share information about their hidden gem by entering the URL containing the information and sharing it with others.
 
