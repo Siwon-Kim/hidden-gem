@@ -6,26 +6,34 @@ from account import account
 app = Flask(__name__)
 app.register_blueprint(account)
 
-import requests, certifi
+import requests, certifi, jwt
+
+SECRET_KEY = "SPARTA"
 
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient(
-    "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority"
 )
-db = client.dbhiddengem
+db = client.dbHiddenGem
 
 
 @app.route("/")
 def home():
-    client = MongoClient(
-        "mongodb+srv://hidden:gem@cluster0.bdeer72.mongodb.net/?retryWrites=true&w=majority"
-    )
-    db = client.dbtom
-    stores = db.store
-    return render_template("index.html", stores=stores)
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.user.find_one({"id": payload["id"]})
+        return render_template("index.html", nickname=user_info["nick"])
+    except:
+        return render_template("index.html")
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for(".login", msg="로그인 정보가 존재하지 않습니다."))
+
+    # stores = db.store
+    # return render_template("index.html", stores=stores)
 
 
 # 페이지 불러오기
@@ -83,8 +91,20 @@ def store_get():
     stores = list(db.stores.find())
     for store in stores:
         store["_id"] = str(store["_id"])
-
-    return jsonify({"stores": stores})
+    
+    # FE에서 해당 유저의 like 클릭 판별을 위한 부분
+    liked_store = []
+    try:
+        token_receive = request.cookies.get('mytoken')
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload["id"]
+        user_info = list(db.user.find({'id': userid}))
+        for info in user_info:
+            for liked_s in info["liked_store"]:
+                liked_store.append(str(liked_s))
+        return jsonify({"stores": stores, "liked_store": liked_store})
+    except:
+        return jsonify({"stores": stores, "liked_store": liked_store})
 
 
 # # Update
@@ -98,16 +118,62 @@ def store_delete():
 
 
 # Like button
-@app.route("/like", methods=["POST"])
-def like_update():
-    id_receive = request.form["id_give"]
+@app.route("/likeUp", methods=["POST"])
+def like_up():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload["id"]
 
-    like = db.stores.find_one({"_id": ObjectId(id_receive)}, {"like": 1})
-    num_like = int(like["like"]) + 1
-    add_like = {"$set": {"like": num_like}}
+        store_id_receive = request.form["id_give"]
 
-    db.stores.update_one({"_id": ObjectId(id_receive)}, add_like)
-    return jsonify({"msg": "like is increased by 1"})
+        # store id를 기준으로 현재 like의 개수를 추출
+        like = db.stores.find_one({"_id": ObjectId(store_id_receive)}, {"like": 1})
+        num_like = int(like["like"]) + 1
+
+        # db에서 store의 like 개수 update시켜줄 부분
+        add_like = {"$set": {"like": num_like}}
+        db.stores.update_one({"_id": ObjectId(store_id_receive)}, add_like)
+
+        # db에서 해당 사용자가 해당 store에 like를 눌렀다는 요소 추가
+        add_liked_store = {'$addToSet': {'liked_store': store_id_receive}}
+        db.user.update_one({'id': userid}, add_liked_store)
+        
+        return jsonify({"msg": "You added Like"})
+    
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("go_login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("go_login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+@app.route("/likeDown", methods=["POST"])
+def like_down():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload["id"]
+
+        store_id_receive = ObjectId(request.form["id_give"])
+
+        # store id를 기준으로 현재 like의 개수를 추출
+        like = db.stores.find_one({"_id": store_id_receive}, {"like": 1})
+        num_like = int(like["like"]) - 1
+
+        # db에서 store의 like 개수 update시켜줄 부분
+        add_like = {"$set": {"like": num_like}}
+        db.stores.update_one({"_id": store_id_receive}, add_like)
+
+        # db에서 해당 사용자가 해당 store에 like를 지웠다는 요소 추가
+        delete_liked_store = {'$pull': {'liked_store': store_id_receive}}
+        db.user.update_one({'id': payload["id"]}, delete_liked_store)
+        
+        return jsonify({"msg": "You deleted Like"})
+    
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("go_login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("go_login", msg="로그인 정보가 존재하지 않습니다."))
 
 
 if __name__ == "__main__":

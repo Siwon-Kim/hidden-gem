@@ -1,12 +1,16 @@
+
 $(document).ready(function () {
 	listing();
 });
 
 function listing() {
+	let liked_store;
 	fetch("/store")
 		.then((res) => res.json())
 		.then((data) => {
 			let stores = data["stores"];
+			try { liked_store = data["liked_store"] }
+			catch { liked_store = [] }
 			$("#cards").empty();
 			stores.forEach((e) => {
 				let name = e["store_name"];
@@ -25,8 +29,18 @@ function listing() {
                                             src="${image}"
                                             class="card-img-top"
                                         />
-                                        <div class="card-body">
-                                            <h5 class="card-title">${name}</h5>
+										<div style="text-align: right;">
+											<button
+												type="button"
+												class="btn btn-dark delete"
+												value=${id}
+												style="margin: 15px 15px 0 15px;"
+											>
+												삭제
+											</button>
+										</div>
+                                        <div class="card-body content" style="padding-top: 0px;">
+                                            <h4 class="card-title">${name}</h4>
                                             <p class="card-text">
                                                 ${address}
                                             </p>
@@ -38,32 +52,50 @@ function listing() {
                                                 ${comment}
                                             </p>
                                         </div>
-                                        <button
-                                            type="button"
-                                            class="btn btn-dark delete"
-                                            value=${id}
-                                        >
-                                            삭제
-                                        </button>
-                                        <button type="button" class="btn btn-secondary">저장</button>
-						                <button type="button" class="btn like" value=${id}>&#128077 ${like}</button>
-                                    </div>
+										<div class="store-btn">
+											<button type="button" class="button is-info">저장</button>
+												<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
+
+												<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
+										</div>
+									</div>
                                 </div>`;
 
 				$("#cards").append(temp_html);
 			});
+			
 			$(".like").click(function () {
-				// Frontend: Increasing Like count on the page
-				$(this).html(function (i, val) {
-					return `&#128077 ${val.split(" ")[1] * 1 + 1}`;
-				});
+				let storeid = this.value
+				// Like 버튼 클릭시 1 증가
+				console.log(storeid, liked_store);
+				if (!liked_store.includes(storeid)) {
+					// Frontend: Increasing Like count on the page
+					$(this).html(function (i, val) {
+						return `&#128077 ${val.split(" ")[1] * 1 + 1}`;
+					});
+					liked_store.append(stordid)
 
-				// Backend: Sending Like count on th page to the DB
-				let formData = new FormData();
-				formData.append("id_give", this.value);
-				fetch("/like", { method: "POST", body: formData })
-					.then((response) => response.json())
-					.then((data) => {});
+					// Backend: Sending Like count on th page to the DB
+					let formData = new FormData();
+					formData.append("id_give", this.value);
+					fetch("/likeUp", { method: "POST", body: formData })
+						.then((response) => response.json())
+						.then((data) => {
+						});
+				}
+				// Like 버튼 클릭시 1 감소 
+				else if (liked_store.includes(storeid)) {
+					$(this).html(function (i, val) {
+						return `&#128077 ${val.split(" ")[1] * 1 - 1}`;
+					});
+
+					let formData = new FormData();
+					formData.append("id_give", this.value);
+					fetch("/likeDown", { method: "POST", body: formData })
+						.then((response) => response.json())
+						.then((data) => {
+						});
+				}
 			});
 
 			$(".delete").click(function () {
@@ -109,3 +141,4 @@ function logout() {
 	alert("로그아웃!");
 	window.location.href = "/login";
 }
+>>>>>>> 4f841397b1860b2abad5aed0731a58f0c367da0d:static/index.js

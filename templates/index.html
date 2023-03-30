@@ -1,86 +1,146 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-		crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
-	<title>Hidden Gem 나만의 숨겨진 맛집 찾기</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+			crossorigin="anonymous"
+		/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+		
+		<title>&#127860 Hidden Gem 나만의 숨겨진 맛집 찾기</title>
 		<link rel="stylesheet" href="../static/style.css" />
-		<script src="../static/app.js"></script>
+		<script src="../static/index.js"></script>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+		/>
 	</head>
 
 	<body>
-		<div class="mytitle">
-			<h1>Hidden Gem 나만의 숨겨진 맛집 찾기</h1>
+		<div class="content mytitle">
+			<h1 style="margin-bottom: 18px; color: white;">&#127860 Hidden Gem 나만의 숨겨진 맛집 찾기 &#127860</h1>
+			{%if nickname%}
+			<h5 class="subtitle" style="color: white;">환영합니다, {{nickname}}님!</h5>
 			<div>
-				<button class="login" onclick="location.href='login'"> 로그인 </button>
-				<button class="register" onclick="location.href='register'"> 회원가입 </button>
-				<button class="button is-danger" onclick="logout()">
-					로그아웃
+				<button class="btn btn-warning button" onclick="logout()">
+				로그아웃
 				</button>
+			</div>
+			<button class="button is-medium" onclick="open_box()">맛집 기록하기</button>
+
+			{%else%}
+			<div>
+				<button class="button is-light login" onclick="location.href='login'">
+					로그인
+				</button>
+				<button class="button is-light register" onclick="location.href='register'">
+					회원가입
+				</button>
+			</div>
+			{%endif%}
 		</div>
-		<button onclick="open_box()">맛집 기록하기</button>
-	</div>
-	<div class="mypost" id="post-box">
-		<div class="form-floating mb-3">
-			<input id="url" type="email" class="form-control" placeholder="name@example.com" />
-			<label>망고 플레이트 URL</label>
+		{%if nickname%}
+		<div class="mypost" id="post-box">
+			<div class="form-floating mb-3">
+				<input
+					id="url"
+					type="email"
+					class="form-control"
+					placeholder="name@example.com"
+				/>
+				<label>망고 플레이트 URL</label>
+			</div>
+			<div class="form-floating mb-3">
+				<textarea
+					id="comment"
+					class="form-control"
+					placeholder="Leave a comment here"
+				></textarea>
+				<label for="floatingTextarea2">리뷰</label>
+			</div>
+			<div class="input-group mb-3">
+				<label class="input-group-text" for="inputGroupSelect01"
+					>별점</label
+				>
+				<select class="form-select" id="star">
+					<option selected id="option-d">--별점 선택하기--</option>
+					<option value="1">⭐</option>
+					<option value="2">⭐⭐</option>
+					<option value="3">⭐⭐⭐</option>
+					<option value="4">⭐⭐⭐⭐</option>
+					<option value="5">⭐⭐⭐⭐⭐</option>
+				</select>
+			</div>
+			<div class="mybtns">
+				<button onclick="posting()" type="button" class="button is-dark">
+					업로드하기
+				</button>
+				<button
+					onclick="close_box()"
+					type="button"
+					class="button is-info is-light"
+				>
+					닫기
+				</button>
+			</div>
 		</div>
-		<div class="form-floating mb-3">
-			<textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
-			<label for="floatingTextarea2">리뷰</label>
-		</div>
-		<div class="input-group mb-3">
-			<label class="input-group-text" for="inputGroupSelect01">별점</label>
-			<select class="form-select" id="star">
-				<option selected>--별점 선택하기--</option>
-				<option value="1">⭐</option>
-				<option value="2">⭐⭐</option>
-				<option value="3">⭐⭐⭐</option>
-				<option value="4">⭐⭐⭐⭐</option>
-				<option value="5">⭐⭐⭐⭐⭐</option>
-			</select>
-		</div>
-		<div class="mybtns">
-			<button onclick="posting()" type="button" class="btn btn-dark">
-				업로드하기
-			</button>
-			<button onclick="close_box()" type="button" class="btn btn-outline-dark">
-				닫기
-			</button>
-		</div>
-	</div>
-	<div class="mycards">
-		<div class="row row-cols-1 row-cols-md-4 g-4" id="cards">
-			<div class="col">
-				<div class="card h-100">
-					<img src="https://image.kmib.co.kr/online_image/2015/0312/201503121102_61180009228304_1.jpg"
-						class="card-img-top" />
-					<div class="card-body">
-						<h5 class="card-title">맛집이름이 들어갑니다</h5>
-						<p class="card-text">
-							여기에 맛집에 대한 설명이 들어갑니다.
-						</p>
-						<p>⭐⭐⭐</p>
-						<p class="mycomment">
-							나의 맛집에 대한 한줄 평을 씁니다
-						</p>
+		{%endif%}
+		<div class="mycards">
+			<div class="row row-cols-1 row-cols-md-4 g-4" id="cards">
+				<div class="col">
+					<div class="card h-100">
+						<img
+							src="#"
+							class="card-img-top"
+						/>
+						<div style="text-align: right;">
+							<button
+								type="button"
+								class="btn btn-dark delete"
+								value="id"
+								style="margin: 15px 15px 0 15px;"
+							>
+								삭제
+							</button>
+						</div>
+						<div class="card-body content" style="padding-top: 0px;">
+							<h4 class="card-title">식당 이름이 들어갑니다</h4>
+							<p class="card-text">
+								식당 주소가 들어갑니다
+							</p>
+							<p class="card-text">
+								식당 카테고리가 들어갑니다
+							</p>
+							<p>별점이 들어갑니다</p>
+							<p class="mycomment">
+								코멘트가 들어갑니다
+							</p>
+						</div>
+						<div class="store-btn">
+							<button type="button" class="button is-info">저장</button>
+							{% if id is not in liked_store %}
+								<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
+							{% else %}
+								<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
+							{% endif %}
+						</div>
 					</div>
-					<button onclick="deleting()" type="button" class="btn btn-dark">
-						삭제
-					</button>
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
-
+	</body>
 </html>
