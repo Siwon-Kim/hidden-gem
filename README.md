@@ -1,7 +1,7 @@
 # :fork_and_knife: Hidden Gem (숨겨진 나의 맛집 공유 웹사이트)
 > Hidden Gem은 자신이 알고 있는 숨겨진 맛집을 뜻합니다.
 
-![hiddengem thumbnail](https://user-images.githubusercontent.com/76824986/228803745-65f2129d-5151-4037-b8e2-efaac78e61bf.png)
+<img src="https://github.com/kangdh208/hiddengem/blob/master/26%EC%A1%B0-HiddenGem.gif" width="1000" height="500"/>
 
 
 ## 1. 제작기간 & 팀원소개
