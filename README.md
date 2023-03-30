@@ -1,5 +1,5 @@
 # :fork_and_knife: Hidden Gem (숨겨진 나의 맛집 공유 웹사이트)
-> Hidden Gem은 자신만이 알고 있는 숨겨진 맛집을 뜻합니다.
+> Hidden Gem은 자신이 알고 있는 숨겨진 맛집을 뜻합니다.
 
 ![hiddengem thumbnail](https://user-images.githubusercontent.com/76824986/228803745-65f2129d-5151-4037-b8e2-efaac78e61bf.png)
 
