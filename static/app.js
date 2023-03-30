@@ -25,8 +25,18 @@ function listing() {
                                             src="${image}"
                                             class="card-img-top"
                                         />
-                                        <div class="card-body">
-                                            <h5 class="card-title">${name}</h5>
+										<div style="text-align: right;">
+											<button
+												type="button"
+												class="btn btn-dark delete"
+												value=${id}
+												style="margin: 15px 15px 0 15px;"
+											>
+												삭제
+											</button>
+										</div>
+                                        <div class="card-body content" style="padding-top: 0px;">
+                                            <h4 class="card-title">${name}</h4>
                                             <p class="card-text">
                                                 ${address}
                                             </p>
@@ -39,15 +49,9 @@ function listing() {
                                             </p>
                                         </div>
 										<div class="store-btn">
-											<button
-												type="button"
-												class="btn btn-dark delete"
-												value=${id}
-											>
-												삭제
-											</button>
-											<button type="button" class="btn btn-warning">저장</button>
-											<button type="button" class="btn btn-secondary like" value=${id}>&#128077 ${like}</button>
+											
+											<button type="button" class="button is-warning"">저장</button>
+											<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
 										</div>
 									</div>
                                 </div>`;
