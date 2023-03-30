@@ -49,6 +49,7 @@ def go_register():
 
 @app.route("/store", methods=["POST"])
 def store_post():
+    # 입력으로 받아온 URL을 통해 크롤링합니다
     url_receive = request.form["url_give"]
     comment_receive = request.form["comment_give"]
     star_receive = request.form["star_give"]
@@ -71,6 +72,14 @@ def store_post():
     img_url = soup.find("img")["src"]
     like = 0
 
+    # 로그인된 유저 정보도 DB에 추가합니다
+    try:
+        token_receive = request.cookies.get('mytoken')
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload["id"]
+    except:
+        userid = None
+        
     store = {
         "store_name": store_name,
         "address": address[0],
@@ -79,6 +88,7 @@ def store_post():
         "store_comment": comment_receive,
         "star": star_receive,
         "like": like,
+        "userid": userid
     }
 
     db.stores.insert_one(store)
@@ -93,7 +103,7 @@ def store_get():
         store["_id"] = str(store["_id"])
     
     # FE에서 해당 유저의 like 클릭 판별을 위한 부분
-    liked_store = []
+    userid, liked_store = None, []
     try:
         token_receive = request.cookies.get('mytoken')
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -102,12 +112,15 @@ def store_get():
         for info in user_info:
             for liked_s in info["liked_store"]:
                 liked_store.append(str(liked_s))
-        return jsonify({"stores": stores, "liked_store": liked_store})
+        return jsonify({"stores": stores, "userid": userid, "liked_store": liked_store})
     except:
-        return jsonify({"stores": stores, "liked_store": liked_store})
+        return jsonify({"stores": stores, "userid": userid, "liked_store": liked_store})
 
 
-# # Update
+# Update
+@app.route("/update", methods=["POST"])
+def store_update():
+    pass
 
 # Delete
 @app.route("/store", methods=["DELETE"])
@@ -154,19 +167,20 @@ def like_down():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         userid = payload["id"]
 
-        store_id_receive = ObjectId(request.form["id_give"])
+        store_id_receive = request.form["id_give"]
 
         # store id를 기준으로 현재 like의 개수를 추출
-        like = db.stores.find_one({"_id": store_id_receive}, {"like": 1})
+        like = db.stores.find_one({"_id": ObjectId(request.form["id_give"])}, {"like": 1})
         num_like = int(like["like"]) - 1
 
         # db에서 store의 like 개수 update시켜줄 부분
         add_like = {"$set": {"like": num_like}}
-        db.stores.update_one({"_id": store_id_receive}, add_like)
+        db.stores.update_one({"_id": ObjectId(request.form["id_give"])}, add_like)
 
         # db에서 해당 사용자가 해당 store에 like를 지웠다는 요소 추가
+        print('down', userid, store_id_receive)
         delete_liked_store = {'$pull': {'liked_store': store_id_receive}}
-        db.user.update_one({'id': payload["id"]}, delete_liked_store)
+        db.user.update_one({'id': userid}, delete_liked_store)
         
         return jsonify({"msg": "You deleted Like"})
     
