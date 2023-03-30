@@ -15,9 +15,9 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient(
-    "mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority"
 )
-db = client.dbHiddenGem
+db = client.dbhiddengem
 
 
 @app.route("/")
