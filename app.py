@@ -15,7 +15,7 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient(
-    "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://sparta:test@cluster0.5pjmefm.mongodb.net/?retryWrites=true&w=majority"
 )
 db = client.dbhiddengem
 

@@ -51,6 +51,9 @@ function listing() {
                                             <p class="mycomment">
                                                 ${comment}
                                             </p>
+											<p class="nick">
+                                            	작성자 ${comment}
+                                            </p>
                                         </div>
 										<div class="store-btn">
 											<button type="button" class="button is-info">저장</button>
@@ -115,6 +118,7 @@ function posting() {
 	let url = $("#url").val();
 	let comment = $("#comment").val();
 	let star = $("#star").val();
+	let nickname = $("#nickname").val();
 
 	let formData = new FormData();
 	formData.append("url_give", url);
@@ -141,4 +145,4 @@ function logout() {
 	alert("로그아웃!");
 	window.location.href = "/login";
 }
->>>>>>> 4f841397b1860b2abad5aed0731a58f0c367da0d:static/index.js
+
