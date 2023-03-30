@@ -23,7 +23,7 @@
 		
 		<title>&#127860 Hidden Gem 나만의 숨겨진 맛집 찾기</title>
 		<link rel="stylesheet" href="../static/style.css" />
-		<script src="../static/app.js"></script>
+		<script src="../static/index.js"></script>
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
@@ -104,26 +104,40 @@
 				<div class="col">
 					<div class="card h-100">
 						<img
-							src="https://image.kmib.co.kr/online_image/2015/0312/201503121102_61180009228304_1.jpg"
+							src="#"
 							class="card-img-top"
 						/>
-						<div class="card-body">
-							<h5 class="card-title">맛집이름이 들어갑니다</h5>
+						<div style="text-align: right;">
+							<button
+								type="button"
+								class="btn btn-dark delete"
+								value="id"
+								style="margin: 15px 15px 0 15px;"
+							>
+								삭제
+							</button>
+						</div>
+						<div class="card-body content" style="padding-top: 0px;">
+							<h4 class="card-title">식당 이름이 들어갑니다</h4>
 							<p class="card-text">
-								여기에 맛집에 대한 설명이 들어갑니다.
+								식당 주소가 들어갑니다
 							</p>
-							<p>⭐⭐⭐</p>
+							<p class="card-text">
+								식당 카테고리가 들어갑니다
+							</p>
+							<p>별점이 들어갑니다</p>
 							<p class="mycomment">
-								나의 맛집에 대한 한줄 평을 씁니다
+								코멘트가 들어갑니다
 							</p>
 						</div>
-						<button
-							onclick="deleting()"
-							type="button"
-							class="btn btn-dark"
-						>
-							삭제
-						</button>
+						<div class="store-btn">
+							<button type="button" class="button is-info">저장</button>
+							{% if id is not in liked_store %}
+								<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
+							{% else %}
+								<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 			</div>

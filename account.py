@@ -8,10 +8,9 @@ import certifi
 ca = certifi.where()
 
 client = MongoClient(
-    "mongodb+srv://sparta:test@cluster0.kpkxwy8.mongodb.net/?retryWrites=true&w=majority",
-    tlsCAFile=ca
+    "mongodb+srv://siwon:rlaznf11@cluster0.icysouv.mongodb.net/?retryWrites=true&w=majority"
 )
-db = client.dbhiddengem
+db = client.dbHiddenGem
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
@@ -62,7 +61,7 @@ def register():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@account.route("/api/register", methods=["POST"] )
+@account.route("/api/register/save", methods=["POST"] )
 def api_register():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -74,6 +73,16 @@ def api_register():
 
     return jsonify({"result": "success"})
 
+# [회원가입 중복 확인 API]
+# 회원가입 시 id와 nickname의 중복 여부를 판별하는 API입니다.
+@account.route('api/register/duplicate_check', methods=['POST'])
+def api_duplicate():
+    id_receive = request.form["id_give"]
+    nickname_receive = request.form["nickname_give"]
+    exists = bool(db.user.find_one({"id": id_receive}))
+    if not exists: # if id already exists, no need to check nickname duplicates
+        exists = bool(db.user.find_one({"nickname": nickname_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
