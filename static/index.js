@@ -3,11 +3,14 @@ $(document).ready(function () {
 	listing();
 });
 
+let id
+
 function listing() {
 	let liked_store;
 	fetch("/store")
 		.then((res) => res.json())
 		.then((data) => {
+			let nick = ''
 			let stores = data["stores"];
 			try { liked_store = data["liked_store"] }
 			catch { liked_store = [] }
@@ -20,7 +23,9 @@ function listing() {
 				let star = e["star"];
 				let comment = e["store_comment"];
 				let like = e["like"];
-				let id = e["_id"];
+				id = e["_id"];
+				nick = e["nick"];
+		
 
 				let star_repeat = "⭐".repeat(star);
 				let temp_html = `<div class="col">
@@ -52,15 +57,15 @@ function listing() {
                                                 ${comment}
                                             </p>
 											<p class="nick">
-                                            	작성자 ${comment}
+                                            	작성자 ${nick}
                                             </p>
                                         </div>
 										<div class="store-btn">
 											<button type="button" class="button is-info">저장</button>
+											<button type="button" class="button is-danger modify" value=${id}>수정</button>
 												<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
 
 												<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
-										</div>
 									</div>
                                 </div>`;
 
@@ -111,14 +116,24 @@ function listing() {
 						window.location.reload();
 					});
 			});
+
+
+			$(".modify").click(function () {
+				id = this.value;
+				$("#update-box").toggle();
+
+			
+			});
 		});
 }
 
+
+
 function posting() {
+
 	let url = $("#url").val();
 	let comment = $("#comment").val();
 	let star = $("#star").val();
-	let nickname = $("#nickname").val();
 
 	let formData = new FormData();
 	formData.append("url_give", url);
@@ -132,13 +147,35 @@ function posting() {
 		});
 }
 
+function update() {
+	console.log(id)
+	let comment_update = $("#commentupdate").val();
+	console.log(comment_update)
+	let star_update = $("#starupdate").val();
+	console.log(star_update)
+
+	let formData = new FormData();
+	formData.append("comment_give", comment_update);
+	formData.append("star_give", star_update);
+	formData.append("id_give", id);
+
+	fetch("/update", { method: "UPDATE", body: formData })
+		.then((res) => res.json())
+		.then((data) => {
+			window.location.reload();
+		});
+	$("#update-box").toggle();
+}
+
+function close_update() {
+	$("#update-box").toggle();
+}
 function open_box() {
 	$("#post-box").show();
 }
 function close_box() {
 	$("#post-box").hide();
 }
-
 // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
 function logout() {
 	$.removeCookie("mytoken");
