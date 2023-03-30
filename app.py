@@ -6,7 +6,9 @@ from account import account
 app = Flask(__name__)
 app.register_blueprint(account)
 
-import requests, certifi
+import requests, certifi, jwt
+
+SECRET_KEY = "SPARTA"
 
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
@@ -20,12 +22,22 @@ db = client.dbhiddengem
 
 @app.route("/")
 def home():
-    client = MongoClient(
-        "mongodb+srv://hidden:gem@cluster0.bdeer72.mongodb.net/?retryWrites=true&w=majority"
-    )
-    db = client.dbtom
-    stores = db.store
-    return render_template("index.html", stores=stores)
+    # client = MongoClient(
+    #     "mongodb+srv://hidden:gem@cluster0.bdeer72.mongodb.net/?retryWrites=true&w=majority"
+    # )
+    # db = client.dbtom
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.user.find_one({"id": payload["id"]})
+        return render_template("index.html", nickname=user_info["nick"])
+    except:
+        return render_template("index.html")
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for(".login", msg="로그인 정보가 존재하지 않습니다."))
+
+    # stores = db.store
+    # return render_template("index.html", stores=stores)
 
 
 # 페이지 불러오기

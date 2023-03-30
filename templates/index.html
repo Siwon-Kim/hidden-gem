@@ -21,7 +21,7 @@
 		></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-		<title>Hidden Gem 나만의 숨겨진 맛집 찾기</title>
+		<title>&#127860 Hidden Gem 나만의 숨겨진 맛집 찾기</title>
 		<link rel="stylesheet" href="../static/style.css" />
 		<script src="../static/app.js"></script>
 	</head>
@@ -29,6 +29,16 @@
 	<body>
 		<div class="mytitle">
 			<h1 style="margin-bottom: 18px;">&#127860 Hidden Gem 나만의 숨겨진 맛집 찾기 &#127860</h1>
+			{%if nickname%}
+			<h5 class="subtitle">환영합니다, {{nickname}}님!</h5>
+			<div>
+				<button class="btn btn-warning button" onclick="logout()">
+				로그아웃
+				</button>
+			</div>
+			<button style="margin: 15px;" onclick="open_box()">맛집 기록하기</button>
+
+			{%else%}
 			<div>
 				<button class="btn btn-light login" onclick="location.href='login'">
 					로그인
@@ -36,12 +46,10 @@
 				<button class="btn btn-light register" onclick="location.href='register'">
 					회원가입
 				</button>
-				<button class="btn btn-warning button" onclick="logout()">
-					로그아웃
-				</button>
 			</div>
-			<button style="margin: 15px;" onclick="open_box()">맛집 기록하기</button>
+			{%endif%}
 		</div>
+		{%if nickname%}
 		<div class="mypost" id="post-box">
 			<div class="form-floating mb-3">
 				<input
@@ -86,6 +94,7 @@
 				</button>
 			</div>
 		</div>
+		{%endif%}
 		<div class="mycards">
 			<div class="row row-cols-1 row-cols-md-4 g-4" id="cards">
 				<div class="col">
