@@ -132,11 +132,7 @@
 						</div>
 						<div class="store-btn">
 							<button type="button" class="button is-info">저장</button>
-							{% if id is not in liked_store %}
-								<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
-							{% else %}
-								<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
-							{% endif %}
+							<button type="button" class="button is-warning like" value=${id}>&#128077 ${like}</button>
 						</div>
 					</div>
 				</div>
