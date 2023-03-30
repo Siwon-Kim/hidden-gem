@@ -85,6 +85,8 @@
 					<option value="5">⭐⭐⭐⭐⭐</option>
 				</select>
 			</div>
+
+			
 			<div class="mybtns">
 				<button onclick="posting()" type="button" class="button is-dark">
 					업로드하기
@@ -98,7 +100,47 @@
 				</button>
 			</div>
 		</div>
+
 		{%endif%}
+
+		
+		<div class="mypost" id="update-box">
+			<div class="form-floating mb-3">
+				<textarea
+					id="commentupdate"
+					class="form-control"
+					placeholder="Leave a comment here"
+				></textarea>
+				<label for="floatingTextarea2">리뷰 수정</label>
+			</div>
+			<div class="input-group mb-3">
+				<label class="input-group-text" for="inputGroupSelect01"
+					>별점</label
+				>
+				<select class="form-select" id="starupdate">
+					<option selected id="option-d">--별점 수정하기--</option>
+					<option value="1">⭐</option>
+					<option value="2">⭐⭐</option>
+					<option value="3">⭐⭐⭐</option>
+					<option value="4">⭐⭐⭐⭐</option>
+					<option value="5">⭐⭐⭐⭐⭐</option>
+				</select>
+			</div>
+
+			
+			<div class="mybtns">
+				<button onclick="update()" type="button" class="button is-dark">
+					수정하기
+				</button>
+				<button
+					onclick="close_update()"
+					type="button"
+					class="button is-info is-light"
+				>
+					닫기
+				</button>
+			</div>
+		</div>
 		<div class="mycards">
 			<div class="row row-cols-1 row-cols-md-4 g-4" id="cards">
 				<div class="col">
@@ -129,18 +171,25 @@
 							<p class="mycomment">
 								코멘트가 들어갑니다
 							</p>
+							<p class="nick">
+								작성자가 들어갑니다
+							</p>
 						</div>
 						<div class="store-btn">
 							<button type="button" class="button is-info">저장</button>
+							<button type="button" class="button is-danger modify">수정</button>
+							
 							{% if id is not in liked_store %}
 								<button type="button" class="button is-warning is-light like" value=${id}>&#128077 ${like}</button>
 							{% else %}
 								<button type="button" class="button is-warning unlike" value=${id}>&#128077 ${like}</button>
 							{% endif %}
-						</div>
+
 					</div>
 				</div>
 			</div>
 		</div>
+
+
 	</body>
 </html>
