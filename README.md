@@ -9,7 +9,7 @@ Using AWS EC2
 [Hidden Gem Website](http://100.25.193.224:5000/)
 
 ## 1. Project Period & Team members
- - 03/26/2023 ~ 03/30/2023
+ - 03/27/2023 ~ 03/30/2023
  - Onboarding Toy Project
  - Team members Information
 <table class="tg">
