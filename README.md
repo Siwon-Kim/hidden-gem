@@ -46,12 +46,11 @@ Using AWS EC2
 
 
 ## 3. User Stories
-```
-Users can share information about their hidden gem by entering the Mango Plate URL containing the information and sharing it with others.
-Users can sign up, log in, and log out of the website.
-Users can press the "like" button on the hidden gem post.
-Users can delete their hidden gem posts.
-```
+> Users can share information about their hidden gem by entering the Mango Plate URL containing the information and sharing it with others.
+> Users can sign up, log in, and log out of the website.
+> Users can press the "like" button on the hidden gem post.
+> Users can delete their hidden gem posts.
+
 - Login and Sign-up
    - Display Login and Sign-up buttons before logging in.
    - Display only the Logout button when logged in.
@@ -65,7 +64,7 @@ Users can delete their hidden gem posts.
 - Like Button Feature
    - Like button for recommending restaurants.
    - Only one like per user is possible.
-   - The button can be clicked again to cancel the like.소
+   - The button can be clicked again to cancel the like.
 
 - Delete Restaurant Post
    - Clicking the delete button removes the post.
